@@ -1,0 +1,3 @@
+class LoginApi{
+  LoginApi._();
+}

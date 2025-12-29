@@ -1,18 +1,20 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
 part '_splash_state.dart';
 
-class SplashCubit extends Cubit<SplashState>{
+class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(const SplashInitial());
 
   Future<void> loadApp() async {
     try {
       emit(const SplashLoading());
-      // Simulate some loading tasks like fetching user data, settings, etc.
       await Future.delayed(const Duration(seconds: 2));
-      // After loading, decide the next route (e.g., home or login)
-      const redirectedRoute = '/login'; // Example route
+      final Box tokenBox = Hive.box('tokens');
+
+      final accessToken = tokenBox.get('accessToken');
+      final redirectedRoute = (accessToken != null) ? '/home' : '/login';
+
       emit(SplashLoaded(redirectedRoute: redirectedRoute));
     } catch (e) {
       emit(SplashError(message: e.toString()));

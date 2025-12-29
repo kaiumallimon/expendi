@@ -1,8 +1,13 @@
 import 'package:expendi/app/config/_theme.dart';
 import 'package:expendi/app/routes/_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main()async{
+void main() async {
+  await dotenv.load(fileName: ".env");
+  await Hive.initFlutter();
+  await Hive.openBox('tokens');
   runApp(const MyApp());
 }
 
