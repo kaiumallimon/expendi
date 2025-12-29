@@ -30,8 +30,8 @@ class MainShell extends StatelessWidget {
       'route': '/add',
     },
     {
-      'icon': FontAwesomeIcons.wallet,
-      'activeIcon': FontAwesomeIcons.wallet,
+      'icon': FontAwesomeIcons.coins,
+      'activeIcon': FontAwesomeIcons.coins,
       'label': 'Expenses',
       'route': '/expenses',
     },
@@ -94,7 +94,7 @@ class MainShell extends StatelessWidget {
                     onPressed: () => _onDestinationSelected(index),
                     icon: FaIcon(
                       isSelected ? item['activeIcon'] : item['icon'],
-                      color: isSelected ? theme.colorScheme.onSurface : theme.colorScheme.surface.withAlpha(120),
+                      color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.surface.withAlpha(120),
                       size: 28,
                     ),
                     tooltip: item['label'],
