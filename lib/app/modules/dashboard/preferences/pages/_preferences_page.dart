@@ -30,6 +30,8 @@ class _PreferencesView extends StatefulWidget {
 }
 
 class __PreferencesViewState extends State<_PreferencesView> {
+  final ScrollController _scrollController = ScrollController();
+
   final List<Map<String, dynamic>> menus = [
     {
       'title': 'Update Profile',
@@ -65,12 +67,42 @@ class __PreferencesViewState extends State<_PreferencesView> {
     },
   ];
 
-  final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  double _headerVisibility() {
+    if (!_scrollController.hasClients) return 1.0;
+
+    final offset = _scrollController.offset;
+    // Handle negative offsets (overscroll bounce at top)
+    if (offset <= 0) return 1.0;
+
+    // Use a threshold - once past 30px, stay hidden
+    if (offset >= 30) return 0.0;
+
+    // Smooth transition from 0 to 30px
+    final value = 1 - (offset / 30);
+    return value.clamp(0.0, 1.0);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final statusbarHeight = MediaQuery.of(context).padding.top;
+
     return BlocBuilder<PreferencesCubit, PreferencesState>(
       builder: (context, state) {
         if (state is PreferencesLoading) {
@@ -81,51 +113,73 @@ class __PreferencesViewState extends State<_PreferencesView> {
           return Center(child: Text('Error: ${state.errorMessage}'));
         } else {
           final user = (state as PreferencesSuccess).user;
+          // final visibility = _headerVisibility();
+
           return Container(
             color: theme.colorScheme.onSurface,
-            // padding: EdgeInsets.only(left: 16, right: 16, top: statusbarHeight + 10),
             child: Column(
               children: [
                 // AppBar Section with User Info
                 AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+                  duration: const Duration(milliseconds: 300),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 40,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(24),
                       bottomRight: Radius.circular(24),
                     ),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: theme.colorScheme.surface.withAlpha(20),
+                    //       blurRadius: 100,
+                    //       spreadRadius: 10,
+                    //       offset: const Offset(0, 50),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
                   child: Column(
-                    mainAxisSize: .min,
-
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-
-                    if(_scrollController.hasClients && _scrollController.offset < 100) Center(
-                        child: Container(
-                          padding: EdgeInsets.all(40),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withAlpha(30),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: theme.colorScheme.primary,
-                              width: 2,
+                      // Profile Picture with smooth fade and size animation
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        height: 120,
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(40),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary.withAlpha(30),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: theme.colorScheme.primary,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            user.fullName.isNotEmpty
-                                ? user.fullName[0].toUpperCase()
-                                : '',
-                            style: theme.textTheme.displayLarge?.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
+                            child: Text(
+                              user.fullName.isNotEmpty
+                                  ? user.fullName[0].toUpperCase()
+                                  : '',
+                              style: theme.textTheme.displayLarge?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
 
-                      if(_scrollController.hasClients && _scrollController.offset == 0) SizedBox(height: 16),
+                      // Gap with smooth height animation
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        height: 16,
+                      ),
 
                       Center(
                         child: Text(
@@ -135,7 +189,7 @@ class __PreferencesViewState extends State<_PreferencesView> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Center(
                         child: Text(
                           user.email,
@@ -157,7 +211,10 @@ class __PreferencesViewState extends State<_PreferencesView> {
                     controller: _scrollController,
                     slivers: [
                       SliverPadding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 20,
+                        ),
                         sliver: SliverList.builder(
                           itemCount: menus.length,
                           itemBuilder: (context, index) {
@@ -173,29 +230,35 @@ class __PreferencesViewState extends State<_PreferencesView> {
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      mainAxisAlignment: .center,
-                                      crossAxisAlignment: .start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           menu['title'],
-                                          style: theme.textTheme.headlineSmall?.copyWith(
-                                            color: menu['foregroundColor'],
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: theme.textTheme.headlineSmall
+                                              ?.copyWith(
+                                                color: menu['foregroundColor'],
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         const SizedBox(height: 8.0),
                                         Text(
                                           menu['subtitle'],
-                                          style: theme.textTheme.bodyMedium?.copyWith(
-                                            color: menu['foregroundColor'],
-                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                color: menu['foregroundColor'],
+                                              ),
                                         ),
                                       ],
                                     ),
                                   ),
                                   FaIcon(
                                     menu['icon'],
-                                    color: menu['foregroundColor'].withAlpha(150),
+                                    color: menu['foregroundColor'].withAlpha(
+                                      150,
+                                    ),
                                     size: 25,
                                   ),
                                 ],
@@ -215,12 +278,45 @@ class __PreferencesViewState extends State<_PreferencesView> {
                             textColor: Colors.white,
                             text: 'Logout',
                             onPressed: () async {
-                              await ApiClient().clearTokens().then((_) async {
-                                await HiveService('user_data').clear();
-                                if (context.mounted) {
-                                  context.go('/login');
-                                }
-                              });
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                barrierColor: theme.colorScheme.onSurface
+                                    .withAlpha(150),
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirm Logout'),
+                                    content: const Text(
+                                      'Are you sure you want to logout?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(
+                                            context,
+                                          ).pop(); // Close dialog
+                                        },
+                                        child: Text('Cancel', style: TextStyle(color: Colors.black), ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          await ApiClient().clearTokens().then((
+                                            _,
+                                          ) async {
+                                            await HiveService(
+                                              'user_data',
+                                            ).clear();
+                                            if (context.mounted) {
+                                              context.go('/login');
+                                            }
+                                          });
+                                        },
+                                        child: Text('Logout', style: TextStyle(color: Colors.red), ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                           ),
                         ),
@@ -228,20 +324,6 @@ class __PreferencesViewState extends State<_PreferencesView> {
                     ],
                   ),
                 ),
-
-                // CustomButton(
-                //   width: double.infinity,
-                //   height: 50,
-                //   text: 'Logout',
-                //   onPressed: () async {
-                //     await ApiClient().clearTokens().then((_) async {
-                //       await HiveService('user_data').clear();
-                //       if (context.mounted) {
-                //         context.go('/login');
-                //       }
-                //     });
-                //   },
-                // ),
               ],
             ),
           );
