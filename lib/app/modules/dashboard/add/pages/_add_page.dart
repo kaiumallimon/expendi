@@ -53,57 +53,67 @@ class __AddViewState extends State<_AddView> {
         crossAxisAlignment: .start,
         children: [
           /* AppBar */
-          CustomAppBar(theme: theme, height: statusbarHeight),
+          CustomAppBar(
+            theme: theme,
+            height: statusbarHeight,
+            title: 'Add',
+            subtitle:
+                'Create a new transaction or a new expense category or payment method here',
+          ),
           /* Content Area */
-          Expanded(child: ListView.builder(
-            itemCount: _menus.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemBuilder: (context, index) {
-              final menu = _menus[index];
-              return GestureDetector(
-                onTap: (){
-                  // Handle menu tap
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: menu['backgroundColor'],
-                    borderRadius: BorderRadius.circular(24.0),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _menus.length,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemBuilder: (context, index) {
+                final menu = _menus[index];
+                return GestureDetector(
+                  onTap: () {
+                    // Handle menu tap
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: menu['backgroundColor'],
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.all(24.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: .center,
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text(
+                                menu['title'],
+                                style: theme.textTheme.headlineMedium?.copyWith(
+                                  color: menu['foregroundColor'],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                menu['subtitle'],
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: menu['foregroundColor'],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        FaIcon(
+                          menu['icon'],
+                          color: menu['foregroundColor'].withAlpha(150),
+                          size: 25,
+                        ),
+                      ],
+                    ),
                   ),
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(
-                    children: [
-                      Expanded(child: Column(
-                        mainAxisAlignment: .center,
-                        crossAxisAlignment: .start,
-                        children: [
-                          Text(
-                            menu['title'],
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              color: menu['foregroundColor'],
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            menu['subtitle'],
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: menu['foregroundColor'],
-                            ),
-                          ),
-                        ],
-                      )),
-                      FaIcon(
-                        menu['icon'],
-                        color: menu['foregroundColor'].withAlpha(150),
-                        size: 25,
-                      ),
-                    ],
-                  )
-                ),
-              );
-            },
-          )),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
