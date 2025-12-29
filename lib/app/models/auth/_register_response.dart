@@ -59,14 +59,14 @@ class UserData {
   final String email;
   final String fullName;
   final String defaultCurrency;
-  final String avatarUrl;
+  final String? avatarUrl;
 
   UserData({
     required this.id,
     required this.email,
     required this.fullName,
     required this.defaultCurrency,
-    required this.avatarUrl,
+    this.avatarUrl,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -75,7 +75,7 @@ class UserData {
       email: json['email'] as String,
       fullName: json['full_name'] as String,
       defaultCurrency: json['default_currency'] as String,
-      avatarUrl: json['avatar_url'] as String,
+      avatarUrl: json['avatar_url'] as String?,
     );
   }
 
