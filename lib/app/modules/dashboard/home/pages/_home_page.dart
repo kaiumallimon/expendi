@@ -19,9 +19,11 @@ class _HomeView extends StatefulWidget {
 class __HomeViewState extends State<_HomeView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Home View'),
+    final theme = Theme.of(context);
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      child: const Center(
+        child: Text('Home Page'),
       ),
     );
   }
