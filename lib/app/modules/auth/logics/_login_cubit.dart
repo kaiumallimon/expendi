@@ -3,6 +3,7 @@ import 'package:expendi/app/models/auth/_login_req.dart';
 import 'package:expendi/app/models/auth/_login_response.dart';
 import 'package:expendi/app/repositories/remote/v1/auth/_login_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 part '_login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -15,10 +16,15 @@ class LoginCubit extends Cubit<LoginState> {
 
       final response = await LoginApi.loginUser(data: payload);
 
+      // Store tokens using ApiClient
       await ApiClient().setTokens(
         accessToken: response.data.accessToken,
         refreshToken: response.data.refreshToken,
       );
+
+      // store user data in Hive
+      final userBox = await Hive.openBox('user_data');
+      await userBox.put('user', response.data.user.toJson());
 
       emit(LoginSuccess(response: response, redirectedRoute: '/home'));
     } catch (error) {
