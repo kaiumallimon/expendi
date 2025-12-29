@@ -14,8 +14,12 @@ user profiles. Built with Flutter and modern Material-3 Widgets.
 - **Error Handling**: Centralized error handling middleware.
 
 
-## Screenshots
-![Screenshot 1](screenshots/splash.png)
-![Screenshot 2](screenshots/login.png)
-![Screenshot 3](screenshots/register.png)
+<h2>Screenshots</h2>
 
+<table>
+  <tr>
+    <td><img src="screenshots/splash.png" alt="Splash" width="200"></td>
+    <td><img src="screenshots/login.png" alt="Login" width="200"></td>
+    <td><img src="screenshots/register.png" alt="Register" width="200"></td>
+  </tr>
+</table>
