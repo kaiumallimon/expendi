@@ -1,7 +1,10 @@
 import 'package:expendi/app/modules/auth/pages/_login_page.dart';
 import 'package:expendi/app/modules/auth/pages/_register_page.dart';
 import 'package:expendi/app/modules/dashboard/_main_shell.dart';
+import 'package:expendi/app/modules/dashboard/add/pages/_add_category.dart';
+import 'package:expendi/app/modules/dashboard/add/pages/_add_expense.dart';
 import 'package:expendi/app/modules/dashboard/add/pages/_add_page.dart';
+import 'package:expendi/app/modules/dashboard/add/pages/_add_payment_method.dart';
 import 'package:expendi/app/modules/dashboard/expenses/pages/_expense_page.dart';
 import 'package:expendi/app/modules/dashboard/home/pages/_home_page.dart';
 import 'package:expendi/app/modules/dashboard/preferences/pages/_preferences_page.dart';
@@ -71,6 +74,33 @@ final GoRouter router = GoRouter(
                 context: context,
                 state: state,
                 child: AddPage(),
+              ),
+            ),
+
+            GoRoute(
+              path: '/add/category',
+              pageBuilder: (context,state)=> customTransitionPage(
+                context: context,
+                state: state,
+                child: AddCategoryPage(),
+              ),
+            ),
+
+            GoRoute(
+              path: '/add/expense',
+              pageBuilder: (context,state)=> customTransitionPage(
+                context: context,
+                state: state,
+                child: AddExpensePage(),
+              ),
+            ),
+
+            GoRoute(
+              path: '/add/payment-method',
+              pageBuilder: (context,state)=> customTransitionPage(
+                context: context,
+                state: state,
+                child: AddPaymentMethodPage(),
               ),
             ),
           ],

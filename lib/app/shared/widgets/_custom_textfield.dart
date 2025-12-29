@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -11,6 +10,9 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.isPassword = false,
     this.textStyle,
+    this.fillColor,
+    this.borderColor,
+    this.foregroundColor,
   });
 
   final bool isPassword;
@@ -20,6 +22,9 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final TextStyle? textStyle;
+  final Color? fillColor;
+  final Color? borderColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +33,23 @@ class CustomTextField extends StatelessWidget {
       width: width,
       height: height,
       child: TextField(
+        cursorColor: borderColor ?? theme.colorScheme.primary,
         obscureText: isPassword,
-        style: textStyle ?? theme.textTheme.bodyLarge,
+        style: textStyle ?? theme.textTheme.bodyLarge?.copyWith(
+          color: foregroundColor ?? theme.textTheme.bodyLarge?.color,
+        ),
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
+          labelStyle: TextStyle(
+            color: foregroundColor ?? theme.textTheme.bodyLarge?.color?.withAlpha(150),
+          ),
+          hintStyle: TextStyle(
+            color: foregroundColor ?? theme.textTheme.bodyLarge?.color?.withAlpha(150),
+          ),
           filled: true,
-          fillColor: theme.colorScheme.primary.withAlpha(50),
+          fillColor: fillColor ?? theme.colorScheme.primary.withAlpha(50),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -47,7 +61,7 @@ class CustomTextField extends StatelessWidget {
 
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: theme.colorScheme.primary, width: 2),
+            borderSide: BorderSide(color: borderColor ?? theme.colorScheme.primary, width: 2),
           ),
         ),
       ),

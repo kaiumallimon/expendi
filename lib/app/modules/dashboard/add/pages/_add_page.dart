@@ -2,6 +2,7 @@ import 'package:expendi/app/config/_theme.dart';
 import 'package:expendi/app/shared/widgets/_custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
@@ -27,6 +28,7 @@ class __AddViewState extends State<_AddView> {
       'subtitle': 'Add a new expense',
       'backgroundColor': AppTheme.primaryColor,
       'foregroundColor': Colors.white,
+      'route': '/add/expense',
     },
     {
       'icon': FontAwesomeIcons.tags,
@@ -34,6 +36,7 @@ class __AddViewState extends State<_AddView> {
       'subtitle': 'Add a new category',
       'backgroundColor': AppTheme.secondaryColor,
       'foregroundColor': Colors.white,
+      'route': '/add/category',
     },
     {
       'icon': FontAwesomeIcons.creditCard,
@@ -41,6 +44,7 @@ class __AddViewState extends State<_AddView> {
       'subtitle': 'Add a new payment method',
       'backgroundColor': AppTheme.tertiaryColor,
       'foregroundColor': Colors.black,
+      'route': '/add/payment-method',
     },
   ];
   @override
@@ -69,7 +73,7 @@ class __AddViewState extends State<_AddView> {
                 final menu = _menus[index];
                 return GestureDetector(
                   onTap: () {
-                    // Handle menu tap
+                    context.push(menu['route']);
                   },
                   child: Container(
                     decoration: BoxDecoration(
