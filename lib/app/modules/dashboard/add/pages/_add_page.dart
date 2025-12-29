@@ -56,7 +56,7 @@ class __AddViewState extends State<_AddView> {
           CustomAppBar(
             theme: theme,
             height: statusbarHeight,
-            title: 'Add',
+            title: 'Create New',
             subtitle:
                 'Create a new transaction or a new expense category or payment method here',
           ),
