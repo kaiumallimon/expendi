@@ -36,17 +36,17 @@ class CustomTextField extends StatelessWidget {
         cursorColor: borderColor ?? theme.colorScheme.primary,
         obscureText: isPassword,
         style: textStyle ?? theme.textTheme.bodyLarge?.copyWith(
-          color: foregroundColor ?? theme.textTheme.bodyLarge?.color,
+          color: foregroundColor ?? theme.colorScheme.onPrimary,
         ),
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
           labelStyle: TextStyle(
-            color: foregroundColor ?? theme.textTheme.bodyLarge?.color?.withAlpha(150),
+            color: foregroundColor ?? theme.colorScheme.onPrimary,
           ),
           hintStyle: TextStyle(
-            color: foregroundColor ?? theme.textTheme.bodyLarge?.color?.withAlpha(150),
+            color: foregroundColor ?? theme.colorScheme.onPrimary,
           ),
           filled: true,
           fillColor: fillColor ?? theme.colorScheme.primary.withAlpha(50),
